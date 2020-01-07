@@ -1,33 +1,16 @@
 package model;
 
+import lombok.Data;
+import lombok.NonNull;
+
 import java.util.Date;
 
+@Data
 public class Comment {
+    @NonNull
     private User user;
+    @NonNull
     private Date date;
+    @NonNull
     private String content;
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
 }
