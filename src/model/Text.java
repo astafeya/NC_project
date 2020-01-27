@@ -11,11 +11,9 @@ import java.util.List;
 public class Text {
     @Id
     private int id;
-    @NonNull
     private int ownerID;
     @NonNull
     private String title;
-    @NonNull
     private boolean visibility;
     @NonNull
     private Date lastEditDate;
