@@ -2,14 +2,17 @@ package model;
 
 import lombok.Data;
 import lombok.NonNull;
+import org.springframework.data.annotation.Id;
 
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Data
 public class Text {
-    @NonNull
+    @Id
     private int id;
+    @NonNull
+    private int ownerID;
     @NonNull
     private String title;
     @NonNull
@@ -19,5 +22,5 @@ public class Text {
     @NonNull
     private String content;
     private int rating;
-    private ArrayList<Comment> comments;
+    private List<Comment> comments;
 }

@@ -6,13 +6,11 @@ import lombok.NonNull;
 import java.util.Date;
 
 @Data
-public class Comment {
+public class Evaluation {
     @NonNull
     private int textID;
     @NonNull
-    private int commentatorID;
+    private int evaluatorID;
     @NonNull
     private Date date;
-    @NonNull
-    private String content;
 }

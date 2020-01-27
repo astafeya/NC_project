@@ -2,12 +2,13 @@ package model;
 
 import lombok.Data;
 import lombok.NonNull;
+import org.springframework.data.annotation.Id;
 
-import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public class User {
-    @NonNull
+    @Id
     private int id;
     @NonNull
     private String login;
@@ -15,5 +16,5 @@ public class User {
     private String password;
     @NonNull
     private String eMail;
-    private ArrayList<Text> texts;
+    private List<Text> texts;
 }
