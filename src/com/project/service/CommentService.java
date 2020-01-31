@@ -13,22 +13,22 @@ public class CommentService {
     @Autowired
     CommentRepository commentRepository;
 
-    public Comment create(int textID, int commentatorID, String content) {
+    public Comment create(Integer textID, Integer commentatorID, String content) {
         Date date = new Date();
         return commentRepository.save(new Comment(textID, commentatorID, date, content));
     }
 
-    public Comment edit(int textID, int commentatorID, Date date, String content) {
+    public Comment edit(Integer textID, Integer commentatorID, Date date, String content) {
         Comment comment = commentRepository.find(textID, commentatorID, date);
         comment.setContent(content);
         return commentRepository.save(comment);
     }
 
-    public List<Comment> getByTextID(int textID) {
+    public List<Comment> getByTextID(Integer textID) {
         return commentRepository.findByTextID(textID);
     }
 
-    public void delete(int textID, int commentatorID, Date date) {
+    public void delete(Integer textID, Integer commentatorID, Date date) {
         commentRepository.delete(commentRepository.find(textID, commentatorID, date));
     }
 }

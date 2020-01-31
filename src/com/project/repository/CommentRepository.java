@@ -10,8 +10,8 @@ import java.util.List;
 
 @Repository
 public interface CommentRepository extends MongoRepository<Comment, Integer> {
-    List<Comment> findByTextID(int textID);
+    List<Comment> findByTextID(Integer textID);
 
     @Query(value = "{&and : [{'text_id' : ?0}, {'commentator_id' : ?1}, {'date' : ?2}]}")
-    Comment find(int textID, int commentatorID, Date date); //?
+    Comment find(Integer textID, Integer commentatorID, Date date); //?
 }

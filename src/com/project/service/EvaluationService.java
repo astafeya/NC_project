@@ -13,11 +13,11 @@ public class EvaluationService {
     @Autowired
     private EvaluationRepository evaluationRepository;
 
-    public Evaluation create(int textID, int evaluatorID) {
+    public Evaluation create(Integer textID, Integer evaluatorID) {
         Date date = new Date();
         return evaluationRepository.save(new Evaluation(textID, evaluatorID, date));
     }
-    public boolean isEvaluated(int textID, int evaluatorID) {
+    public boolean isEvaluated(Integer textID, Integer evaluatorID) {
         if (evaluationRepository.findByTextIDAndEvaluatorID(textID, evaluatorID) == null) {
             return false;
         } else {
@@ -25,11 +25,11 @@ public class EvaluationService {
         }
     }
 
-    public int getRating(int textID) {
+    public int getRating(Integer textID) {
         return evaluationRepository.countByTextID(textID);
     }
 
-    public void delete(int textID, int evaluatorID) {
+    public void delete(Integer textID, Integer evaluatorID) {
         evaluationRepository.delete(evaluationRepository.findByTextIDAndEvaluatorID(textID, evaluatorID));
     }
 }

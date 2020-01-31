@@ -8,11 +8,12 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.Date;
 
 @Data
-@AllArgsConstructor
 @Document (collection = "comments")
 public class Comment {
-    private int textID;
-    private int commentatorID;
+    @NonNull
+    private Integer textID;
+    @NonNull
+    private Integer commentatorID;
     @NonNull
     private Date date;
     @NonNull

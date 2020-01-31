@@ -7,8 +7,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface EvaluationRepository extends MongoRepository<Evaluation, Integer> {
-    int countByTextID(int textID);
+    int countByTextID(Integer textID);
 
     @Query(value = "{&and : [{'text_id' : ?0}, {'evaluator_id' : ?1}]}")
-    Evaluation findByTextIDAndEvaluatorID(int textID, int evaluatorID);
+    Evaluation findByTextIDAndEvaluatorID(Integer textID, Integer evaluatorID);
 }
