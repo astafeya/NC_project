@@ -10,12 +10,7 @@ import java.util.List;
 
 @Repository
 public interface TextRepository extends MongoRepository<Text, Integer> {
-    @Query (value = "{&and: [{'ownerID' : ?0}, {'visibility' : 'true'}]}")
-    List<Text> findVisibleTextByOwnerID(Integer ownerID);
+    List<Text> findTextByOwnerIDAndVisibility(Integer ownerID, Boolean visibility);
 
-    @Query (value = "{&and: [{'ownerID' : ?0}, {'visibility' : 'false'}]}")
-    List<Text> findInvisibleTextByOwnerID(Integer ownerID);
-
-    @Query (value = "{&and: [{'ownerID' : ?0}, {'creationDate' : ?1}]}")
-    Text find(Integer ownerID, Date creationDate);
+    Text findByOwnerIDAndCreationDate(Integer ownerID, Date creationDate);
 }

@@ -12,6 +12,5 @@ import java.util.List;
 public interface CommentRepository extends MongoRepository<Comment, Integer> {
     List<Comment> findByTextID(Integer textID);
 
-    @Query(value = "{&and : [{'text_id' : ?0}, {'commentator_id' : ?1}, {'date' : ?2}]}")
-    Comment find(Integer textID, Integer commentatorID, Date date); //?
+    Comment findByTextIDAndCommentatorIDAndDate(Integer textID, Integer commentatorID, Date date);
 }
