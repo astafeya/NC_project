@@ -16,9 +16,9 @@ public class EvaluationService {
     @Autowired
     private EvaluationRepository evaluationRepository;
 
-    public Evaluation create(Integer textID, Integer evaluatorID) {
+    public Evaluation create(Integer id, Integer textID, Integer evaluatorID) {
         Date date = new Date();
-        Evaluation evaluation = evaluationRepository.save(new Evaluation(textID, evaluatorID, date));
+        Evaluation evaluation = evaluationRepository.save(new Evaluation(id, textID, evaluatorID, date));
         log.info("create: " + evaluation.toString());
         return evaluation;
     }
@@ -41,7 +41,7 @@ public class EvaluationService {
 
     public void delete(Integer textID, Integer evaluatorID) {
         Evaluation evaluation = evaluationRepository.findByTextIDAndEvaluatorID(textID, evaluatorID);
-        log.info("delete: " + textID + " " + evaluatorID);
+        log.info("delete: textID = " + textID + ", evaluatorID = " + evaluatorID);
         evaluationRepository.delete(evaluation);
     }
 }

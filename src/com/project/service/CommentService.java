@@ -16,9 +16,9 @@ public class CommentService {
     @Autowired
     private CommentRepository commentRepository;
 
-    public Comment create(Integer textID, Integer commentatorID, String content) {
+    public Comment create(Integer id, Integer textID, Integer commentatorID, String content) {
         Date date = new Date();
-        Comment comment = commentRepository.save(new Comment(textID, commentatorID, date, content));
+        Comment comment = commentRepository.save(new Comment(id, textID, commentatorID, date, content));
         log.info("create: " + comment);
         return comment;
     }
@@ -27,7 +27,7 @@ public class CommentService {
         Comment comment = commentRepository.findByTextIDAndCommentatorIDAndDate(textID, commentatorID, date);
         log.info("edit starts: " + comment);
         comment.setContent(content);
-        log.info("edit ends:" + comment);
+        log.info("edit ends: " + comment);
         return commentRepository.save(comment);
     }
 
@@ -38,7 +38,7 @@ public class CommentService {
     }
 
     public void delete(Integer textID, Integer commentatorID, Date date) {
-        log.info("delete: textID = " + textID + ", commentatorID = " + ", date = " + date);
+        log.info("delete: textID = " + textID + ", commentatorID = " + commentatorID +", date = " + date);
         commentRepository.delete(commentRepository.findByTextIDAndCommentatorIDAndDate(textID, commentatorID, date));
     }
 }

@@ -52,25 +52,25 @@ public class SpringBootStarter implements CommandLineRunner {
         List<Text> visTexts = textService.getVisibleTextsByOwnerID(1);*/
 
         //Comment
-        /*commentService.create(1, 1, "super");
-        commentService.create(1, 2, "super2");
+        /*commentService.create(1,1, 1, "super");
+        commentService.create(2,1, 2, "super2");*/
 
-        List<Comment> comments = commentService.getByTextID(1);*/
+        /*List<Comment> comments = commentService.getByTextID(1);
 
-        /*commentService.edit(comments.get(0).getTextID(), comments.get(0).getCommentatorID(),
+        commentService.edit(comments.get(0).getTextID(), comments.get(0).getCommentatorID(),
                 comments.get(0).getDate(), "class");
         commentService.delete(comments.get(1).getTextID(), comments.get(1).getCommentatorID(),
                 comments.get(1).getDate());*/
 
         //Evaluator
-        /*evaluationService.create(1,1);
-        evaluationService.create(2,1);
-        evaluationService.create(3,1);
+        /*evaluationService.create(1,1,1);
+        evaluationService.create(2, 2,1);
+        evaluationService.create(3, 3,1);
 
-        evaluationService.create(2,2);
+        evaluationService.create(4, 2,2);
 
-        evaluationService.create(1,3);
-        evaluationService.create(3,3);*/
+        evaluationService.create(5, 1,3);
+        evaluationService.create(6, 3,3);*/
 
         /*evaluationService.getRating(1);
         evaluationService.getRating(2);
@@ -78,8 +78,8 @@ public class SpringBootStarter implements CommandLineRunner {
 
         evaluationService.isEvaluated(1, 1);
         evaluationService.isEvaluated(1, 2);
-        evaluationService.isEvaluated(1, 3);*/
+        evaluationService.isEvaluated(1, 3);
 
-        //evaluationService.delete(1,1);
+        evaluationService.delete(1, 1);*/
     }
 }
