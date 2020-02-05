@@ -9,8 +9,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface EvaluationRepository extends MongoRepository<Evaluation, Integer> {
-    int countByTextID(Integer textID);
+public interface EvaluationRepository extends MongoRepository<Evaluation, Long> {
+    int countByTextID(long textID);
 
-    Evaluation findByTextIDAndEvaluatorID(Integer textID, Integer evaluatorID);
+    Evaluation findByTextIDAndEvaluatorID(long textID, long evaluatorID);
 }

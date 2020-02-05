@@ -9,8 +9,8 @@ import java.util.Date;
 import java.util.List;
 
 @Repository
-public interface CommentRepository extends MongoRepository<Comment, Integer> {
-    List<Comment> findByTextID(Integer textID);
+public interface CommentRepository extends MongoRepository<Comment, Long> {
+    List<Comment> findByTextID(long textID);
 
-    Comment findByTextIDAndCommentatorIDAndDate(Integer textID, Integer commentatorID, Date date);
+    Comment findByTextIDAndCommentatorIDAndDate(long textID, long commentatorID, Date date);
 }

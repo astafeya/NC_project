@@ -1,19 +1,22 @@
 package com.project.model;
 
-import lombok.*;
+import lombok.Data;
+import lombok.NonNull;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
 
 @Data
-@AllArgsConstructor
 @Document (collection = "texts")
 public class Text {
+    @Transient
+    public static final String SEQUENCE_NAME = "texts_sequence";
     @Id
-    private Integer id;
+    private long id;
     @NonNull
-    private Integer ownerID;
+    private Long ownerID;
     @NonNull
     private String title;
     @NonNull

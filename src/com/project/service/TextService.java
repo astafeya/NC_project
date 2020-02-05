@@ -16,15 +16,14 @@ public class TextService {
     @Autowired
     private TextRepository textRepository;
 
-    public Text create(Integer id, Integer ownerID, String title, Boolean visibility, String content) {
+    public Text create(Long ownerID, String title, Boolean visibility, String content) {
         Date creationDate = new Date();
-        //Integer id = //TODO: auto generation id
-        Text text = textRepository.save(new Text(id, ownerID, title, visibility, creationDate, creationDate, content));
+        Text text = textRepository.save(new Text(ownerID, title, visibility, creationDate, creationDate, content));
         log.info("create : " + text);
         return text;
     }
 
-    public Text edit(Integer ownerID, String title, Boolean visibility, Date creationDate, String content) {
+    public Text edit(Long ownerID, String title, Boolean visibility, Date creationDate, String content) {
         Text text = textRepository.findByOwnerIDAndCreationDate(ownerID, creationDate);
         log.info("edit starts: " + text);
         text.setTitle(title);
@@ -36,13 +35,13 @@ public class TextService {
         return textRepository.save(text);
     }
 
-    public List<Text> getVisibleTextsByOwnerID(Integer ownerID) {
+    public List<Text> getVisibleTextsByOwnerID(Long ownerID) {
         List<Text> texts = textRepository.findTextByOwnerIDAndVisibility(ownerID, true);
         log.info("getVisibleTextsByOwnerID: ownerID = " + ownerID + ", result = " + texts);
         return texts;
     }
 
-    public List<Text> getInvisibleTextsByOwnerID(Integer ownerID) {
+    public List<Text> getInvisibleTextsByOwnerID(Long ownerID) {
         List<Text> texts = textRepository.findTextByOwnerIDAndVisibility(ownerID, false);
         log.info("getInvisibleTextsByOwnerID: ownerID = " + ownerID + ", result = " + texts);
         return texts;

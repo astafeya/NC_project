@@ -1,21 +1,22 @@
 package com.project.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NonNull;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
 
 @Data
-@AllArgsConstructor
 @Document (collection = "users")
 public class User {
+    @Transient
+    public static final String SEQUENCE_NAME = "users_sequence";
     @Id
-    private Integer id;
+    private long id;
     @NonNull
     @Length(min = 2)
     private String login;

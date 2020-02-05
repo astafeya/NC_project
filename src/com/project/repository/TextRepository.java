@@ -10,7 +10,7 @@ import java.util.List;
 
 @Repository
 public interface TextRepository extends MongoRepository<Text, Integer> {
-    List<Text> findTextByOwnerIDAndVisibility(Integer ownerID, Boolean visibility);
+    List<Text> findTextByOwnerIDAndVisibility(long ownerID, Boolean visibility);
 
-    Text findByOwnerIDAndCreationDate(Integer ownerID, Date creationDate);
+    Text findByOwnerIDAndCreationDate(long ownerID, Date creationDate);
 }

@@ -16,14 +16,14 @@ public class CommentService {
     @Autowired
     private CommentRepository commentRepository;
 
-    public Comment create(Integer id, Integer textID, Integer commentatorID, String content) {
+    public Comment create(Long textID, Long commentatorID, String content) {
         Date date = new Date();
-        Comment comment = commentRepository.save(new Comment(id, textID, commentatorID, date, content));
+        Comment comment = commentRepository.save(new Comment(textID, commentatorID, date, content));
         log.info("create: " + comment);
         return comment;
     }
 
-    public Comment edit(Integer textID, Integer commentatorID, Date date, String content) {
+    public Comment edit(Long textID, Long commentatorID, Date date, String content) {
         Comment comment = commentRepository.findByTextIDAndCommentatorIDAndDate(textID, commentatorID, date);
         log.info("edit starts: " + comment);
         comment.setContent(content);
@@ -31,13 +31,13 @@ public class CommentService {
         return commentRepository.save(comment);
     }
 
-    public List<Comment> getByTextID(Integer textID) {
+    public List<Comment> getByTextID(Long textID) {
         List<Comment> comments = commentRepository.findByTextID(textID);
         log.info("getByTextID: textID = " + textID + ", result = " + comments);
         return comments;
     }
 
-    public void delete(Integer textID, Integer commentatorID, Date date) {
+    public void delete(Long textID, Long commentatorID, Date date) {
         log.info("delete: textID = " + textID + ", commentatorID = " + commentatorID +", date = " + date);
         commentRepository.delete(commentRepository.findByTextIDAndCommentatorIDAndDate(textID, commentatorID, date));
     }
