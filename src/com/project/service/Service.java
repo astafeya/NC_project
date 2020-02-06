@@ -1,51 +1,51 @@
 package com.project.service;
 
 import com.project.model.Comment;
+import com.project.model.Evaluation;
 import com.project.model.Text;
 import com.project.model.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import com.project.repository.UserRepository;
+import com.project.repository.Repository;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Service
-public class UserService {
-    private static Logger log = LogManager.getLogger(UserService.class.getName());
+@org.springframework.stereotype.Service
+public class Service {
+    private static Logger log = LogManager.getLogger(Service.class.getName());
     @Autowired
-    private UserRepository userRepository;
+    private Repository repository;
 
     // --------------------------------User--------------------------------
 
     public User create(String login, String password, String eMail) {
-        User user = userRepository.insert(new User(login, password, eMail));
-        log.info("create: " + user);
+        User user = repository.insert(new User(login, password, eMail));
+        log.info("create user: " + user);
         return user;
     }
 
     public User edit(String login, String password, String eMail) {
-        User user = userRepository.findByLogin(login);
-        log.info("edit started: " + user);
+        User user = repository.findByLogin(login);
+        log.info("edit user started: " + user);
         user.setPassword(password);
         user.setEMail(eMail);
-        log.info("edit ended: " + user);
-        return userRepository.save(user);
+        log.info("edit user ended: " + user);
+        return repository.save(user);
     }
 
     public User findByLogin(String login) {
-        User user = userRepository.findByLogin(login);
+        User user = repository.findByLogin(login);
         log.info("findByLogin: login = " + login + ", result = " + user);
         return user;
     }
 
     public void delete(String login) {
-        log.info("delete started: login = " + login);
-        userRepository.delete(userRepository.findByLogin(login));
-        log.info("delete ended");
+        log.info("delete user started: login = " + login);
+        repository.delete(repository.findByLogin(login));
+        log.info("delete user ended");
     }
 
     // --------------------------------Text--------------------------------
@@ -53,19 +53,19 @@ public class UserService {
     public Text addText(String login, String title, Boolean visibility, String content) {
         Date creationDate = new Date();
         Text text = new Text (title, visibility, creationDate, creationDate, content);
-        User user = userRepository.findByLogin(login);
+        User user = repository.findByLogin(login);
         List<Text> texts = user.getTexts();
         if (texts == null) {
             texts = new ArrayList<>();
         }
         texts.add(text);
         user.setTexts(texts);
-        userRepository.save(user);
+        repository.save(user);
         return text;
     }
 
     public Text getText(String login, Date creationDate) {
-        User user = userRepository.findByLogin(login);
+        User user = repository.findByLogin(login);
         List<Text> texts = user.getTexts();
         int i;
         for (i = 0; i < texts.size(); i++) {
@@ -78,12 +78,12 @@ public class UserService {
     }
 
     public List<Text> getTexts(String login) {
-        User user = userRepository.findByLogin(login);
+        User user = repository.findByLogin(login);
         return user.getTexts();
     }
 
     public void setText(String login, Text text) {
-        User user = userRepository.findByLogin(login);
+        User user = repository.findByLogin(login);
         List<Text> texts = user.getTexts();
         for (int i = 0; i < texts.size(); i++) {
             if (texts.get(i).getCreationDate().equals(text.getCreationDate())) {
@@ -92,7 +92,7 @@ public class UserService {
             }
         }
         user.setTexts(texts);
-        userRepository.save(user);
+        repository.save(user);
     }
 
     public Text editText(String login, String title, Boolean visibility, Date creationDate, String content) {
@@ -107,7 +107,7 @@ public class UserService {
     }
 
     public List<Text> getVisibleTexts(String login) {
-        User user = userRepository.findByLogin(login);
+        User user = repository.findByLogin(login);
         List<Text> texts = user.getTexts();
         List<Text> visibleTexts = new ArrayList<>();
         for (int i = 0; i < texts.size(); i++) {
@@ -119,7 +119,7 @@ public class UserService {
     }
 
     public List<Text> getInvisibleTexts(String login) {
-        User user = userRepository.findByLogin(login);
+        User user = repository.findByLogin(login);
         List<Text> texts = user.getTexts();
         List<Text> invisibleTexts = new ArrayList<>();
         for (int i = 0; i < texts.size(); i++) {
@@ -131,7 +131,7 @@ public class UserService {
     }
 
     public void deleteText(String login, Date creationDate) {
-        User user = userRepository.findByLogin(login);
+        User user = repository.findByLogin(login);
         List<Text> texts = user.getTexts();
         for (int i = 0; i < texts.size(); i++) {
             if (texts.get(i).getCreationDate().equals(creationDate)) {
@@ -140,7 +140,7 @@ public class UserService {
             }
         }
         user.setTexts(texts);
-        userRepository.save(user);
+        repository.save(user);
     }
 
     // --------------------------------Comment--------------------------------
@@ -211,6 +211,46 @@ public class UserService {
             }
         }
         text.setComments(comments);
+        setText(textOwnerLogin, text);
+    }
+
+    // --------------------------------Evaluation--------------------------------
+
+    public Evaluation addEvaluation(String textOwnerLogin, Date textCreationDate, String evaluatorLogin) {
+        Date date = new Date();
+        Evaluation evaluation = new Evaluation(evaluatorLogin, date);
+        Text text = getText(textOwnerLogin, textCreationDate);
+        List<Evaluation> evaluations = text.getEvaluations();
+        if (evaluations == null) {
+            evaluations = new ArrayList<>();
+        }
+        evaluations.add(evaluation);
+        text.setEvaluations(evaluations);
+        setText(textOwnerLogin, text);
+        return evaluation;
+    }
+
+    public boolean isEvaluated(String textOwnerLogin, Date textCreationDate, String evaluatorLogin) {
+        Text text = getText(textOwnerLogin, textCreationDate);
+        List<Evaluation> evaluations = text.getEvaluations();
+        for (int i = 0; i < evaluations.size(); i++) {
+            if (evaluations.get(i).getEvaluatorLogin().equals(evaluatorLogin)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void deleteEvaluation(String textOwnerLogin, Date textCreationDate, String evaluatorLogin) {
+        Text text = getText(textOwnerLogin, textCreationDate);
+        List<Evaluation> evaluations = text.getEvaluations();
+        for (int i = 0; i < evaluations.size(); i++) {
+            if (evaluations.get(i).getEvaluatorLogin().equals(evaluatorLogin)) {
+                evaluations.remove(i);
+                break;
+            }
+        }
+        text.setEvaluations(evaluations);
         setText(textOwnerLogin, text);
     }
 }

@@ -19,4 +19,5 @@ public class Text {
     @NonNull
     private String content;
     private List<Comment> comments;
+    private List<Evaluation> evaluations;
 }
