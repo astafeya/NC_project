@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
+import java.util.List;
 
 @Data
 @Document (collection = "users")
@@ -29,4 +30,5 @@ public class User {
     @Email (regexp = "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$",
             message = "The email address must match the format example@email.com")
     private String eMail;
+    private List<Text> texts;
 }
