@@ -2,7 +2,7 @@ package com.project;
 
 import com.project.model.Comment;
 import com.project.model.Text;
-import com.project.service.Service;
+import com.project.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -13,7 +13,7 @@ import java.util.List;
 @SpringBootApplication
 public class SpringBootStarter implements CommandLineRunner {
     @Autowired
-    private Service service;
+    private UserService service;
 
     public static void main(String[] args) {
         SpringApplication.run(SpringBootStarter.class, args);

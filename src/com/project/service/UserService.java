@@ -7,17 +7,18 @@ import com.project.model.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.project.repository.Repository;
+import com.project.repository.UserRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@org.springframework.stereotype.Service
-public class Service {
-    private static Logger log = LogManager.getLogger(Service.class.getName());
+@Service
+public class UserService {
+    private static Logger log = LogManager.getLogger(UserService.class.getName());
     @Autowired
-    private Repository repository;
+    private UserRepository repository;
 
     // --------------------------------User--------------------------------
 
@@ -61,10 +62,11 @@ public class Service {
         texts.add(text);
         user.setTexts(texts);
         repository.save(user);
+        log.info("addText: ownerLogin = " + login + ", text = " + text);
         return text;
     }
 
-    public Text getText(String login, Date creationDate) {
+    private Text getText(String login, Date creationDate) {
         User user = repository.findByLogin(login);
         List<Text> texts = user.getTexts();
         int i;
@@ -77,12 +79,7 @@ public class Service {
         return text;
     }
 
-    public List<Text> getTexts(String login) {
-        User user = repository.findByLogin(login);
-        return user.getTexts();
-    }
-
-    public void setText(String login, Text text) {
+    private void setText(String login, Text text) {
         User user = repository.findByLogin(login);
         List<Text> texts = user.getTexts();
         for (int i = 0; i < texts.size(); i++) {
@@ -97,12 +94,14 @@ public class Service {
 
     public Text editText(String login, String title, Boolean visibility, Date creationDate, String content) {
         Text text = getText(login, creationDate);
+        log.info("editText started: " + text);
         text.setTitle(title);
         text.setVisibility(visibility);
         text.setContent(content);
         Date lastEditDate = new Date();
         text.setLastEditDate(lastEditDate);
         setText(login, text);
+        log.info("editText ended: " + text);
         return text;
     }
 
@@ -115,6 +114,7 @@ public class Service {
                 visibleTexts.add(texts.get(i));
             }
         }
+        log.info("getVisibleText: " + visibleTexts);
         return visibleTexts;
     }
 
@@ -127,6 +127,7 @@ public class Service {
                 invisibleTexts.add(texts.get(i));
             }
         }
+        log.info("getInvisibleText: " + invisibleTexts);
         return invisibleTexts;
     }
 
@@ -134,7 +135,9 @@ public class Service {
         User user = repository.findByLogin(login);
         List<Text> texts = user.getTexts();
         for (int i = 0; i < texts.size(); i++) {
-            if (texts.get(i).getCreationDate().equals(creationDate)) {
+            Text text = texts.get(i);
+            if (text.getCreationDate().equals(creationDate)) {
+                log.info("deleteText: " + text);
                 texts.remove(i);
                 break;
             }
@@ -156,10 +159,12 @@ public class Service {
         comments.add(comment);
         text.setComments(comments);
         setText(textOwnerLogin, text);
+        log.info("addComment: textOwnerLogin = " + textOwnerLogin + ", textCreationDate = " + textCreationDate
+                + ", comment = " + comment);
         return comment;
     }
 
-    public Comment getComment(String textOwnerLogin, Date textCreationDate, String commentatorLogin,
+    private Comment getComment(String textOwnerLogin, Date textCreationDate, String commentatorLogin,
                               Date commentCreationDate) {
         Text text = getText(textOwnerLogin, textCreationDate);
         List<Comment> comments = text.getComments();
@@ -175,7 +180,7 @@ public class Service {
         return comment;
     }
 
-    public void setComment(String textOwnerLogin, Date textCreationDate, Comment comment) {
+    private void setComment(String textOwnerLogin, Date textCreationDate, Comment comment) {
         Text text = getText(textOwnerLogin, textCreationDate);
         List<Comment> comments = text.getComments();
         for (int i = 0; i < comments.size(); i++) {
@@ -192,8 +197,10 @@ public class Service {
     public Comment editComment(String textOwnerLogin, Date textCreationDate, String commentatorLogin,
                                Date commentCreationDate, String content) {
         Comment comment = getComment(textOwnerLogin, textCreationDate, commentatorLogin, commentCreationDate);
+        log.info("editComment started: " + comment);
         comment.setContent(content);
         setComment(textOwnerLogin, textCreationDate, comment);
+        log.info("editComment ended: " + comment);
         return comment;
     }
 
@@ -207,6 +214,7 @@ public class Service {
             if (comment.getCommentatorLogin().equals(commentatorLogin) &&
                     comment.getDate().equals(commentCreationDate)) {
                 comments.remove(i);
+                log.info("deleteComment: " + comment);
                 break;
             }
         }
@@ -227,6 +235,8 @@ public class Service {
         evaluations.add(evaluation);
         text.setEvaluations(evaluations);
         setText(textOwnerLogin, text);
+        log.info("addEvaluation: textOwnerLogin = " + textOwnerLogin + ", textCreationDate = " + textCreationDate
+                + ", evaluation = " + evaluation);
         return evaluation;
     }
 
@@ -235,9 +245,13 @@ public class Service {
         List<Evaluation> evaluations = text.getEvaluations();
         for (int i = 0; i < evaluations.size(); i++) {
             if (evaluations.get(i).getEvaluatorLogin().equals(evaluatorLogin)) {
+                log.info("isEvaluated: textOwnerLogin = " + textOwnerLogin + ", textCreationDate = "
+                        + textCreationDate + ", evaluatorLogin = " + evaluatorLogin + ", result = true");
                 return true;
             }
         }
+        log.info("isEvaluated: textOwnerLogin = " + textOwnerLogin + ", textCreationDate = "
+                + textCreationDate + ", evaluatorLogin = " + evaluatorLogin + ", result = false");
         return false;
     }
 
@@ -246,6 +260,7 @@ public class Service {
         List<Evaluation> evaluations = text.getEvaluations();
         for (int i = 0; i < evaluations.size(); i++) {
             if (evaluations.get(i).getEvaluatorLogin().equals(evaluatorLogin)) {
+                log.info("deleteEvaluation: " + evaluations.get(i));
                 evaluations.remove(i);
                 break;
             }
