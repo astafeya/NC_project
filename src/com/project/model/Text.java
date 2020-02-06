@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NonNull;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 public class Text {
@@ -17,4 +18,5 @@ public class Text {
     private Date lastEditDate;
     @NonNull
     private String content;
+    private List<Comment> comments;
 }
