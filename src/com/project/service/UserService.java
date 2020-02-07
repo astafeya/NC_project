@@ -13,14 +13,13 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
     private static Logger log = LogManager.getLogger(UserService.class.getName());
     @Autowired
     private UserRepository repository;
-
-    // --------------------------------User--------------------------------
 
     public User create(String login, String password, String eMail) {
         User user = repository.insert(new User(login, password, eMail));
@@ -51,7 +50,7 @@ public class UserService {
 
     // --------------------------------Text--------------------------------
 
-    public Text addText(String login, String title, Boolean visibility, String content) {
+    /*public Text addText(String login, String title, Boolean visibility, String content) {
         Date creationDate = new Date();
         Text text = new Text (title, visibility, creationDate, creationDate, content);
         User user = repository.findByLogin(login);
@@ -69,13 +68,7 @@ public class UserService {
     private Text getText(String login, Date creationDate) {
         User user = repository.findByLogin(login);
         List<Text> texts = user.getTexts();
-        int i;
-        for (i = 0; i < texts.size(); i++) {
-            if (texts.get(i).getCreationDate().equals(creationDate)) {
-                break;
-            }
-        }
-        Text text = texts.get(i);
+        Text text = texts.stream().filter(i -> i.getCreationDate().equals(creationDate)).findAny().get();
         return text;
     }
 
@@ -88,6 +81,7 @@ public class UserService {
                 break;
             }
         }
+        //texts.stream().filter(i -> i.getCreationDate().equals(text.getCreationDate()))
         user.setTexts(texts);
         repository.save(user);
     }
@@ -108,12 +102,7 @@ public class UserService {
     public List<Text> getVisibleTexts(String login) {
         User user = repository.findByLogin(login);
         List<Text> texts = user.getTexts();
-        List<Text> visibleTexts = new ArrayList<>();
-        for (int i = 0; i < texts.size(); i++) {
-            if (texts.get(i).getVisibility()) {
-                visibleTexts.add(texts.get(i));
-            }
-        }
+        List<Text> visibleTexts = texts.stream().filter(i -> i.getVisibility()).collect(Collectors.toList());
         log.info("getVisibleText: " + visibleTexts);
         return visibleTexts;
     }
@@ -121,12 +110,7 @@ public class UserService {
     public List<Text> getInvisibleTexts(String login) {
         User user = repository.findByLogin(login);
         List<Text> texts = user.getTexts();
-        List<Text> invisibleTexts = new ArrayList<>();
-        for (int i = 0; i < texts.size(); i++) {
-            if (!texts.get(i).getVisibility()) {
-                invisibleTexts.add(texts.get(i));
-            }
-        }
+        List<Text> invisibleTexts = texts.stream().filter(i -> !i.getVisibility()).collect(Collectors.toList());
         log.info("getInvisibleText: " + invisibleTexts);
         return invisibleTexts;
     }
@@ -134,21 +118,14 @@ public class UserService {
     public void deleteText(String login, Date creationDate) {
         User user = repository.findByLogin(login);
         List<Text> texts = user.getTexts();
-        for (int i = 0; i < texts.size(); i++) {
-            Text text = texts.get(i);
-            if (text.getCreationDate().equals(creationDate)) {
-                log.info("deleteText: " + text);
-                texts.remove(i);
-                break;
-            }
-        }
+        texts.removeIf(i -> i.getCreationDate().equals(creationDate));
         user.setTexts(texts);
         repository.save(user);
-    }
+    }*/
 
     // --------------------------------Comment--------------------------------
 
-    public Comment addComment(String textOwnerLogin, Date textCreationDate, String commentatorLogin, String content) {
+    /*public Comment addComment(String textOwnerLogin, Date textCreationDate, String commentatorLogin, String content) {
         Date date = new Date();
         Text text = getText(textOwnerLogin, textCreationDate);
         Comment comment = new Comment(commentatorLogin, date, content);
@@ -168,15 +145,8 @@ public class UserService {
                               Date commentCreationDate) {
         Text text = getText(textOwnerLogin, textCreationDate);
         List<Comment> comments = text.getComments();
-        int i;
-        for (i = 0; i < comments.size(); i++) {
-            Comment comment = comments.get(i);
-            if (comment.getCommentatorLogin().equals(commentatorLogin) &&
-            comment.getDate().equals(commentCreationDate)) {
-                break;
-            }
-        }
-        Comment comment = comments.get(i);
+        Comment comment = comments.stream().filter(i -> i.getCommentatorLogin().equals(commentatorLogin) &&
+                i.getDate().equals(commentCreationDate)).findAny().get();
         return comment;
     }
 
@@ -208,23 +178,15 @@ public class UserService {
                               Date commentCreationDate) {
         Text text = getText(textOwnerLogin, textCreationDate);
         List<Comment> comments = text.getComments();
-        int i;
-        for (i = 0; i < comments.size(); i++) {
-            Comment comment = comments.get(i);
-            if (comment.getCommentatorLogin().equals(commentatorLogin) &&
-                    comment.getDate().equals(commentCreationDate)) {
-                comments.remove(i);
-                log.info("deleteComment: " + comment);
-                break;
-            }
-        }
+        comments.removeIf(i -> i.getCommentatorLogin().equals(commentatorLogin) &&
+                i.getDate().equals(commentCreationDate));
         text.setComments(comments);
         setText(textOwnerLogin, text);
-    }
+    }*/
 
     // --------------------------------Evaluation--------------------------------
 
-    public Evaluation addEvaluation(String textOwnerLogin, Date textCreationDate, String evaluatorLogin) {
+    /*public Evaluation addEvaluation(String textOwnerLogin, Date textCreationDate, String evaluatorLogin) {
         Date date = new Date();
         Evaluation evaluation = new Evaluation(evaluatorLogin, date);
         Text text = getText(textOwnerLogin, textCreationDate);
@@ -243,29 +205,24 @@ public class UserService {
     public boolean isEvaluated(String textOwnerLogin, Date textCreationDate, String evaluatorLogin) {
         Text text = getText(textOwnerLogin, textCreationDate);
         List<Evaluation> evaluations = text.getEvaluations();
-        for (int i = 0; i < evaluations.size(); i++) {
-            if (evaluations.get(i).getEvaluatorLogin().equals(evaluatorLogin)) {
-                log.info("isEvaluated: textOwnerLogin = " + textOwnerLogin + ", textCreationDate = "
-                        + textCreationDate + ", evaluatorLogin = " + evaluatorLogin + ", result = true");
-                return true;
-            }
+        Evaluation evaluation = evaluations.stream().filter(i -> i.getEvaluatorLogin().equals(evaluatorLogin))
+                .findAny().orElse(null);
+        if (evaluation != null) {
+            log.info("isEvaluated: textOwnerLogin = " + textOwnerLogin + ", textCreationDate = "
+                    + textCreationDate + ", evaluatorLogin = " + evaluatorLogin + ", result = true");
+            return true;
+        } else {
+            log.info("isEvaluated: textOwnerLogin = " + textOwnerLogin + ", textCreationDate = "
+                    + textCreationDate + ", evaluatorLogin = " + evaluatorLogin + ", result = false");
+            return false;
         }
-        log.info("isEvaluated: textOwnerLogin = " + textOwnerLogin + ", textCreationDate = "
-                + textCreationDate + ", evaluatorLogin = " + evaluatorLogin + ", result = false");
-        return false;
     }
 
     public void deleteEvaluation(String textOwnerLogin, Date textCreationDate, String evaluatorLogin) {
         Text text = getText(textOwnerLogin, textCreationDate);
         List<Evaluation> evaluations = text.getEvaluations();
-        for (int i = 0; i < evaluations.size(); i++) {
-            if (evaluations.get(i).getEvaluatorLogin().equals(evaluatorLogin)) {
-                log.info("deleteEvaluation: " + evaluations.get(i));
-                evaluations.remove(i);
-                break;
-            }
-        }
+        evaluations.removeIf(i -> i.getEvaluatorLogin().equals(evaluatorLogin));
         text.setEvaluations(evaluations);
         setText(textOwnerLogin, text);
-    }
+    }*/
 }

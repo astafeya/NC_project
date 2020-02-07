@@ -1,7 +1,11 @@
 package com.project;
 
 import com.project.model.Comment;
+import com.project.model.Evaluation;
 import com.project.model.Text;
+import com.project.service.CommentService;
+import com.project.service.EvaluationService;
+import com.project.service.TextService;
 import com.project.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -13,7 +17,16 @@ import java.util.List;
 @SpringBootApplication
 public class SpringBootStarter implements CommandLineRunner {
     @Autowired
-    private UserService service;
+    private UserService userService;
+
+    @Autowired
+    private TextService textService;
+
+    @Autowired
+    private CommentService commentService;
+
+    @Autowired
+    private EvaluationService evaluationService;
 
     public static void main(String[] args) {
         SpringApplication.run(SpringBootStarter.class, args);
@@ -22,40 +35,40 @@ public class SpringBootStarter implements CommandLineRunner {
     @Override
     public void run(String ...args) {
         // User
-        service.create("admin", "hgy7fgh", "jg@km.tg");
-        service.create("admin2", "jgk;;mms", "gj@plp.fd");
-        service.create("admin3", "kyyapds", "ssf@km.lg");
-        service.create("admin4", "kyyapds", "ssf@km.lg");
-        service.edit("admin3", "jjgljdj", "dds@fdd.ut");
-        service.delete("admin2");
+        userService.create("admin", "hgy7fgh", "jg@km.tg");
+        userService.create("admin2", "jgk;;mms", "gj@plp.fd");
+        userService.create("admin3", "kyyapds", "ssf@km.lg");
+        userService.create("admin4", "kyyapds", "ssf@km.lg");
+        userService.edit("admin3", "jjgljdj", "dds@fdd.ut");
+        userService.delete("admin2");
 
         // Text
-        service.addText("admin", "some title", false, "some content");
-        service.addText("admin", "some title 2", false, "some content 2");
-        service.addText("admin", "some title 3", false, "some content 3");
-        List<Text> inVisibleTexts = service.getInvisibleTexts("admin");
-        service.editText("admin", "some another title", true, inVisibleTexts.get(0).getCreationDate(),
+        textService.add("admin", "some title", false, "some content");
+        textService.add("admin", "some title 2", false, "some content 2");
+        textService.add("admin", "some title 3", false, "some content 3");
+        List<Text> inVisibleTexts = textService.getInvisibleTexts("admin");
+        textService.edit("admin", "some another title", true, inVisibleTexts.get(0).getCreationDate(),
                 "some another content");
-        service.deleteText("admin", inVisibleTexts.get(1).getCreationDate());
+        textService.delete("admin", inVisibleTexts.get(1).getCreationDate());
 
         // Comment
-        List<Text> visibleTexts = service.getVisibleTexts("admin");
-        service.addComment("admin", visibleTexts.get(0).getCreationDate(), "admin", "some content");
-        service.addComment("admin", visibleTexts.get(0).getCreationDate(), "admin", "some content 2");
-        service.addComment("admin", visibleTexts.get(0).getCreationDate(), "admin", "some content 3");
-        visibleTexts = service.getVisibleTexts("admin");
+        List<Text> visibleTexts = textService.getVisibleTexts("admin");
+        commentService.add("admin", visibleTexts.get(0).getCreationDate(), "admin", "some content");
+        commentService.add("admin", visibleTexts.get(0).getCreationDate(), "admin", "some content 2");
+        commentService.add("admin", visibleTexts.get(0).getCreationDate(), "admin", "some content 3");
+        visibleTexts = textService.getVisibleTexts("admin");
         List<Comment> comments = visibleTexts.get(0).getComments();
-        service.editComment("admin", visibleTexts.get(0).getCreationDate(), "admin",
+        commentService.edit("admin", visibleTexts.get(0).getCreationDate(), "admin",
                 comments.get(0).getDate(), "some new content");
-        service.deleteComment("admin", visibleTexts.get(0).getCreationDate(), "admin",
+        commentService.delete("admin", visibleTexts.get(0).getCreationDate(), "admin",
                 comments.get(1).getDate());
 
         // Evaluation
-        List<Text> texts = service.getVisibleTexts("admin");
-        service.addEvaluation("admin", texts.get(0).getCreationDate(), "admin3");
-        service.addEvaluation("admin", texts.get(0).getCreationDate(), "admin4");
-        service.isEvaluated("admin", texts.get(0).getCreationDate(), "admin3");
-        service.deleteEvaluation("admin", texts.get(0).getCreationDate(), "admin3");
-        service.isEvaluated("admin", texts.get(0).getCreationDate(), "admin3");
+        List<Text> texts = textService.getVisibleTexts("admin");
+        evaluationService.add("admin", texts.get(0).getCreationDate(), "admin3");
+        evaluationService.add("admin", texts.get(0).getCreationDate(), "admin4");
+        evaluationService.isEvaluated("admin", texts.get(0).getCreationDate(), "admin3");
+        evaluationService.delete("admin", texts.get(0).getCreationDate(), "admin3");
+        evaluationService.isEvaluated("admin", texts.get(0).getCreationDate(), "admin3");
     }
 }
