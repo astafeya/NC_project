@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class TextService {
-    private static Logger log = LogManager.getLogger(UserService.class.getName());
+    private static Logger log = LogManager.getLogger(TextService.class.getName());
     @Autowired
     private UserRepository repository;
 
@@ -27,6 +27,8 @@ public class TextService {
         if (texts == null) {
             texts = new ArrayList<>();
         }
+        user.setTextNumber(user.getTextNumber() + 1);
+        text.setId(user.getTextNumber());
         texts.add(text);
         user.setTexts(texts);
         repository.save(user);
@@ -34,10 +36,10 @@ public class TextService {
         return text;
     }
 
-    private Text getText(String login, Date creationDate) {
+    public Text getText(String login, long id) {
         User user = repository.findByLogin(login);
         List<Text> texts = user.getTexts();
-        Text text = texts.stream().filter(i -> i.getCreationDate().equals(creationDate)).findAny().get();
+        Text text = texts.stream().filter(i -> i.getId() == id).findAny().get();
         return text;
     }
 
@@ -45,18 +47,17 @@ public class TextService {
         User user = repository.findByLogin(login);
         List<Text> texts = user.getTexts();
         for (int i = 0; i < texts.size(); i++) {
-            if (texts.get(i).getCreationDate().equals(text.getCreationDate())) {
+            if (texts.get(i).getId() == text.getId()) {
                 texts.set(i, text);
                 break;
             }
         }
-        //texts.stream().filter(i -> i.getCreationDate().equals(text.getCreationDate()))
         user.setTexts(texts);
         repository.save(user);
     }
 
-    public Text edit(String login, String title, Boolean visibility, Date creationDate, String content) {
-        Text text = getText(login, creationDate);
+    public Text edit(String login, long id, String title, Boolean visibility, String content) {
+        Text text = getText(login, id);
         log.info("edit started: " + text);
         text.setTitle(title);
         text.setVisibility(visibility);
@@ -84,11 +85,11 @@ public class TextService {
         return invisibleTexts;
     }
 
-    public void delete(String login, Date creationDate) {
-        log.info("delete: owner = " + login + ", creationDate = " + creationDate);
+    public void delete(String login, long id) {
+        log.info("delete: owner = " + login + ", id = " + id);
         User user = repository.findByLogin(login);
         List<Text> texts = user.getTexts();
-        texts.removeIf(i -> i.getCreationDate().equals(creationDate));
+        texts.removeIf(i -> i.getId() == id);
         user.setTexts(texts);
         repository.save(user);
     }

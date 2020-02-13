@@ -35,40 +35,40 @@ public class SpringBootStarter implements CommandLineRunner {
     @Override
     public void run(String ...args) {
         // User
-        userService.create("admin", "hgy7fgh", "jg@km.tg");
+        /*userService.create("admin", "hgy7fgh", "jg@km.tg");
         userService.create("admin2", "jgk;;mms", "gj@plp.fd");
         userService.create("admin3", "kyyapds", "ssf@km.lg");
         userService.create("admin4", "kyyapds", "ssf@km.lg");
         userService.edit("admin3", "jjgljdj", "dds@fdd.ut");
-        userService.delete("admin2");
+        userService.delete("admin2");*/
 
         // Text
-        textService.add("admin", "some title", false, "some content");
+        /*textService.add("admin", "some title", false, "some content");
         textService.add("admin", "some title 2", false, "some content 2");
-        textService.add("admin", "some title 3", false, "some content 3");
-        List<Text> inVisibleTexts = textService.getInvisibleTexts("admin");
-        textService.edit("admin", "some another title", true, inVisibleTexts.get(0).getCreationDate(),
+        textService.add("admin", "some title 3", false, "some content 3");*/
+        /*List<Text> inVisibleTexts = textService.getInvisibleTexts("admin");
+        textService.edit("admin", inVisibleTexts.get(0).getId(), "some another title", true,
                 "some another content");
-        textService.delete("admin", inVisibleTexts.get(1).getCreationDate());
+        textService.delete("admin", inVisibleTexts.get(1).getId());*/
 
         // Comment
-        List<Text> visibleTexts = textService.getVisibleTexts("admin");
-        commentService.add("admin", visibleTexts.get(0).getCreationDate(), "admin", "some content");
-        commentService.add("admin", visibleTexts.get(0).getCreationDate(), "admin", "some content 2");
-        commentService.add("admin", visibleTexts.get(0).getCreationDate(), "admin", "some content 3");
+        /*List<Text> visibleTexts = textService.getVisibleTexts("admin");
+        commentService.add("admin", visibleTexts.get(0).getId(), "admin", "some content");
+        commentService.add("admin", visibleTexts.get(0).getId(), "admin", "some content 2");
+        commentService.add("admin", visibleTexts.get(0).getId(), "admin", "some content 3");
         visibleTexts = textService.getVisibleTexts("admin");
         List<Comment> comments = visibleTexts.get(0).getComments();
-        commentService.edit("admin", visibleTexts.get(0).getCreationDate(), "admin",
+        commentService.edit("admin", visibleTexts.get(0).getId(), "admin",
                 comments.get(0).getDate(), "some new content");
-        commentService.delete("admin", visibleTexts.get(0).getCreationDate(), "admin",
-                comments.get(1).getDate());
+        commentService.delete("admin", visibleTexts.get(0).getId(), "admin",
+                comments.get(1).getDate());*/
 
         // Evaluation
-        List<Text> texts = textService.getVisibleTexts("admin");
-        evaluationService.add("admin", texts.get(0).getCreationDate(), "admin3");
-        evaluationService.add("admin", texts.get(0).getCreationDate(), "admin4");
-        evaluationService.isEvaluated("admin", texts.get(0).getCreationDate(), "admin3");
-        evaluationService.delete("admin", texts.get(0).getCreationDate(), "admin3");
-        evaluationService.isEvaluated("admin", texts.get(0).getCreationDate(), "admin3");
+        /*List<Text> texts = textService.getVisibleTexts("admin");
+        evaluationService.add("admin", texts.get(0).getId(), "admin3");
+        evaluationService.add("admin", texts.get(0).getId(), "admin4");
+        evaluationService.isEvaluated("admin", texts.get(0).getId(), "admin3");
+        evaluationService.delete("admin", texts.get(0).getId(), "admin3");
+        evaluationService.isEvaluated("admin", texts.get(0).getId(), "admin3");*/
     }
 }

@@ -17,9 +17,10 @@ public class UserService {
     private UserRepository repository;
 
     public User create(String login, String password, String eMail) {
-        User user = repository.insert(new User(login, password, eMail));
+        User user = new User(login, password, eMail);
+        user.setTextNumber(0);
         log.info("create user: " + user);
-        return user;
+        return repository.insert(user);
     }
 
     public User edit(String login, String password, String eMail) {

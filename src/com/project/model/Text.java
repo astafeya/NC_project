@@ -2,12 +2,15 @@ package com.project.model;
 
 import lombok.Data;
 import lombok.NonNull;
+import org.springframework.data.annotation.Id;
 
 import java.util.Date;
 import java.util.List;
 
 @Data
 public class Text {
+    @Id
+    private long id;
     @NonNull
     private String title;
     @NonNull
