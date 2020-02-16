@@ -1,8 +1,5 @@
 package com.project.service;
 
-import com.project.model.Comment;
-import com.project.model.Evaluation;
-import com.project.model.Text;
 import com.project.model.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

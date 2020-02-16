@@ -25,21 +25,20 @@ public class CommentController {
         }
     }
 
-    @PostMapping("/new_comment")
-    public void addComment(@PathVariable String login, @PathVariable long textId, String commentatorLogin,
-                           String content) {
-        service.add(login, textId, commentatorLogin, content);
+    @PostMapping("/newComment")
+    public void addComment(@PathVariable String login, @PathVariable long textId, @RequestBody Comment comment) {
+        service.add(login, textId, comment.getCommentatorLogin(), comment.getContent());
     }
 
-    @PostMapping("/{commentNumber}/edit")
+    @PostMapping("/{commentId}/edit")
     public void editComment(@PathVariable String login, @PathVariable long textId,
-                            @PathVariable int commentNumber, String content) {
-        service.edit(login, textId, commentNumber, content);
+                            @PathVariable long commentId, @RequestBody String content) {
+        service.edit(login, textId, commentId, content);
     }
 
-    @DeleteMapping("/{commentNumber}/delete")
+    @DeleteMapping("/{commentId}/delete")
     public void deleteEvaluation(@PathVariable String login, @PathVariable long textId,
-                                 @PathVariable int commentNumber) {
-        service.delete(login, textId, commentNumber);
+                                 @PathVariable long commentId) {
+        service.delete(login, textId, commentId);
     }
 }

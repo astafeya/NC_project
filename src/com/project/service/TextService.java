@@ -21,7 +21,9 @@ public class TextService {
 
     public Text add(String login, String title, Boolean visibility, String content) {
         Date creationDate = new Date();
-        Text text = new Text (title, visibility, creationDate, creationDate, content);
+        Text text = new Text (title, visibility, content);
+        text.setCreationDate(creationDate);
+        text.setLastEditDate(creationDate);
         User user = repository.findByLogin(login);
         List<Text> texts = user.getTexts();
         if (texts == null) {
@@ -29,6 +31,7 @@ public class TextService {
         }
         user.setTextNumber(user.getTextNumber() + 1);
         text.setId(user.getTextNumber());
+        text.setCommentsNumber(0);
         texts.add(text);
         user.setTexts(texts);
         repository.save(user);

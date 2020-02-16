@@ -42,7 +42,10 @@ public class CommentService {
     public Comment add(String textOwnerLogin, long textId, String commentatorLogin, String content) {
         Date date = new Date();
         Text text = getText(textOwnerLogin, textId);
-        Comment comment = new Comment(commentatorLogin, date, content);
+        text.setCommentsNumber(text.getCommentsNumber() + 1);
+        Comment comment = new Comment(commentatorLogin, content);
+        comment.setDate(date);
+        comment.setId(text.getCommentsNumber());
         List<Comment> comments = text.getComments();
         if (comments == null) {
             comments = new ArrayList<>();
@@ -55,13 +58,10 @@ public class CommentService {
         return comment;
     }
 
-    private Comment getComment(String textOwnerLogin, long textId, /* String commentatorLogin,*/
-                               int commentNumber) {
+    private Comment getComment(String textOwnerLogin, long textId, long commentId) {
         Text text = getText(textOwnerLogin, textId);
         List<Comment> comments = text.getComments();
-        /*Comment comment = comments.stream().filter(i -> i.getCommentatorLogin().equals(commentatorLogin) &&
-                i.getDate().equals(commentCreationDate)).findAny().get();*/
-        Comment comment = comments.get(commentNumber);
+        Comment comment = comments.stream().filter(i -> i.getId() == commentId).findAny().get();
         return comment;
     }
 
@@ -69,8 +69,7 @@ public class CommentService {
         Text text = getText(textOwnerLogin, textId);
         List<Comment> comments = text.getComments();
         for (int i = 0; i < comments.size(); i++) {
-            if (comment.getCommentatorLogin().equals(comment.getCommentatorLogin()) &&
-                    comment.getDate().equals(comment.getDate())) {
+            if (comments.get(i).getId() == comment.getId()) {
                 comments.set(i, comment);
                 break;
             }
@@ -79,9 +78,8 @@ public class CommentService {
         setText(textOwnerLogin, text);
     }
 
-    public Comment edit(String textOwnerLogin, long textId, /*String commentatorLogin,*/
-                               int commentNumber, String content) {
-        Comment comment = getComment(textOwnerLogin, textId, /* commentatorLogin,*/ commentNumber);
+    public Comment edit(String textOwnerLogin, long textId, long commentId, String content) {
+        Comment comment = getComment(textOwnerLogin, textId, commentId);
         log.info("editComment started: " + comment);
         comment.setContent(content);
         setComment(textOwnerLogin, textId, comment);
@@ -95,15 +93,11 @@ public class CommentService {
         return comments;
     }
 
-    public void delete(String textOwnerLogin, long textId, /*String commentatorLogin,*/
-                              int commentNumber) {
-        log.info("delete: owner = " + textOwnerLogin + ", textId = " + textId +
-                /*", commentatorLogin = " + commentatorLogin + */", commentNumber = " + commentNumber);
+    public void delete(String textOwnerLogin, long textId, long commentId) {
+        log.info("delete: owner = " + textOwnerLogin + ", textId = " + textId + ", commentId = " + commentId);
         Text text = getText(textOwnerLogin, textId);
         List<Comment> comments = text.getComments();
-        /*comments.removeIf(i -> i.getCommentatorLogin().equals(commentatorLogin) &&
-                i.getDate().equals(commentCreationDate));*/
-        comments.remove(commentNumber);
+        comments.removeIf(i -> i.getId() == commentId);
         text.setComments(comments);
         setText(textOwnerLogin, text);
     }

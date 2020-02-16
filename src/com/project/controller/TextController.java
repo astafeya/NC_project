@@ -16,12 +16,12 @@ public class TextController {
     @Autowired
     TextService service;
 
-    @PostMapping("/new_text") //+?
-    public void addText(@PathVariable String login, String title, Boolean visibility, String content) {
-        service.add(login, title, visibility, content);
+    @PostMapping("/newText")
+    public void addText(@PathVariable String login, @RequestBody Text text) {
+        service.add(login, text.getTitle(), text.getVisibility(), text.getContent());
     }
 
-    @GetMapping("/{textId}") //+
+    @GetMapping("/{textId}")
     public ResponseEntity<Text> findText(@PathVariable String login, @PathVariable long textId) {
         Text text = service.getText(login, textId);
         if (text == null) {
@@ -31,18 +31,17 @@ public class TextController {
         }
     }
 
-    @PostMapping("/{textId}/edit") //+?
-    public void editText(@PathVariable String login, @PathVariable long textId, String title, Boolean visibility,
-                         String content) {
-        service.edit(login, textId, title, visibility, content);
+    @PostMapping("/{textId}/edit")
+    public void editText(@PathVariable String login, @PathVariable long textId, @RequestBody Text text) {
+        service.edit(login, textId, text.getTitle(), text.getVisibility(), text.getContent());
     }
 
-    @DeleteMapping("/{textId}/delete") //+?
+    @DeleteMapping("/{textId}/delete")
     public void deleteText(@PathVariable String login, @PathVariable long textId) {
         service.delete(login, textId);
     }
 
-    @GetMapping("/texts") //+
+    @GetMapping("/texts")
     public ResponseEntity<List<Text>> getVisibleTexts(@PathVariable String login) {
         List<Text> texts = service.getVisibleTexts(login);
         if (texts == null) {
@@ -52,7 +51,7 @@ public class TextController {
         }
     }
 
-    @GetMapping("/drafts") //+
+    @GetMapping("/drafts")
     public ResponseEntity<List<Text>> getInvisibleTexts(@PathVariable String login) {
         List<Text> texts = service.getInvisibleTexts(login);
         if (texts == null) {

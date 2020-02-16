@@ -15,18 +15,18 @@ public class EvaluationController {
         return service.getEvaluation(login, textId);
     }
 
-    @PostMapping("/new_evaluation")
-    public void addEvaluation(@PathVariable String login, @PathVariable long textId, String evaluatorLogin) {
+    @PostMapping("/newEvaluation")
+    public void addEvaluation(@PathVariable String login, @PathVariable long textId, @RequestBody String evaluatorLogin) {
         service.add(login, textId, evaluatorLogin);
     }
 
-    @GetMapping("/is_evaluated")
-    public boolean isEvaluated(@PathVariable String login, @PathVariable long textId, String evaluatorLogin) {
+    @GetMapping("/isEvaluated")
+    public boolean isEvaluated(@PathVariable String login, @PathVariable long textId, @RequestBody String evaluatorLogin) {
         return service.isEvaluated(login, textId, evaluatorLogin);
     }
 
-    @DeleteMapping("/delete_evaluation")
-    public void deleteEvaluation(@PathVariable String login, @PathVariable long textId, String evaluatorLogin) {
+    @DeleteMapping("/deleteEvaluation")
+    public void deleteEvaluation(@PathVariable String login, @PathVariable long textId, @RequestBody String evaluatorLogin) {
         service.delete(login, textId, evaluatorLogin);
     }
 }

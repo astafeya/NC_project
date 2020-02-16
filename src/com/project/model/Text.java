@@ -16,11 +16,10 @@ public class Text {
     @NonNull
     private Boolean visibility;
     @NonNull
-    private Date creationDate;
-    @NonNull
-    private Date lastEditDate;
-    @NonNull
     private String content;
+    private Date creationDate;
+    private Date lastEditDate;
+    private long commentsNumber;
     private List<Comment> comments;
     private List<Evaluation> evaluations;
 }

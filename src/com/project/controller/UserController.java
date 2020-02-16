@@ -18,8 +18,8 @@ public class UserController {
         service.create(user.getLogin(), user.getPassword(), user.getEMail());
     }
 
-    @GetMapping("/find") //+
-    public ResponseEntity<User> findUser(@RequestParam String login) {
+    @GetMapping("/{login}")
+    public ResponseEntity<User> findUser(@PathVariable String login) {
         User user = service.findByLogin(login);
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -33,8 +33,8 @@ public class UserController {
         service.edit(user.getLogin(), user.getPassword(), user.getEMail());
     }
 
-    @DeleteMapping("/delete") //+?
-    public void deleteUser(@RequestParam String login) {
+    @DeleteMapping("/delete")
+    public void deleteUser(@RequestBody String login) {
         service.delete(login);
     }
 }

@@ -74,13 +74,19 @@ public class EvaluationService {
     public int getEvaluation(String textOwnerLogin, long textId) {
         Text text = getText(textOwnerLogin, textId);
         List<Evaluation> evaluations = text.getEvaluations();
-        log.info("getEvaluation: textOwnerLogin = " + textOwnerLogin + ", textId = " + textId +
-                ", result = " + evaluations.size());
-        return evaluations.size();
+        if (evaluations == null) {
+            log.info("getEvaluation: textOwnerLogin = " + textOwnerLogin + ", textId = " + textId +
+                    ", result = " + 0);
+            return 0;
+        } else {
+            log.info("getEvaluation: textOwnerLogin = " + textOwnerLogin + ", textId = " + textId +
+                    ", result = " + evaluations.size());
+            return evaluations.size();
+        }
     }
 
     public void delete(String textOwnerLogin, long textId, String evaluatorLogin) {
-        log.info("delete: owner = " + textOwnerLogin + ", txtId = " + textId +
+        log.info("delete: owner = " + textOwnerLogin + ", textId = " + textId +
                 ", evaluatorLogin = " + evaluatorLogin);
         Text text = getText(textOwnerLogin, textId);
         List<Evaluation> evaluations = text.getEvaluations();
