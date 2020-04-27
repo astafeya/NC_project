@@ -24,7 +24,6 @@ public class User {
             message = "The password must contain lowercase and uppercase Latin letters, numbers, and special characters.")
     @Length(min = 8, message = "The password must be at least 8 characters long.")
     private String password;
-    //@NonNull
     @Email (regexp = "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$",
             message = "The email address must match the format example@email.com")
     private String eMail;

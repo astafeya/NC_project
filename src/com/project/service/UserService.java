@@ -1,6 +1,5 @@
 package com.project.service;
 
-import com.project.configuration.SecurityConfiguration;
 import com.project.model.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,11 +12,9 @@ public class UserService {
     private static Logger log = LogManager.getLogger(UserService.class.getName());
     @Autowired
     private UserRepository repository;
-    @Autowired
-    private SecurityConfiguration configuration;
 
     public User create(String login, String password, String eMail) {
-        User user = new User(login, configuration.passwordEncoder().encode(password)/*, eMail*/);
+        User user = new User(login, password);
         user.setEMail(eMail);
         user.setTextNumber(0);
         log.info("create user: " + user);
